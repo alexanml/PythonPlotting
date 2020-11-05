@@ -1,0 +1,7 @@
+README.txt
+knuplot.py
+setup.py
+knuplot.egg-info/PKG-INFO
+knuplot.egg-info/SOURCES.txt
+knuplot.egg-info/dependency_links.txt
+knuplot.egg-info/top_level.txt

@@ -1,0 +1,58 @@
+#!/usr/bin/env python3
+#
+# Usage: cottsplit filename outfilename
+# Default filename = cott.tec
+# Default outfilename = cott_time
+#
+from knuplot import Tecplot
+import os
+from sys import argv
+
+# Make a list of input files
+def filelist():
+    return [
+        ['cott.tec', 'time']]
+
+# Use knuplot to load data into the variable tp
+def loadfiles(files):
+    # Check that all files exist
+    for file in files:
+        if not os.path.exists(file[0]):
+            print file[0] + ' does not exist.'
+            sys.exit()
+    # Plot all lines
+    tp = []
+    for file in files:
+        filename = file[0]
+        name = file[1]
+        a = Tecplot(filename)
+        a.name = name
+        tp.append(a)
+    return tp
+
+
+# Dump to gnuplot compatible files
+# withBoundary - If false, the ghost cells are not included in the output
+def cvsdump(tecplots,withBoundary):
+    for a in tecplots:
+        name = a.name
+        for i in xrange(0, a.nzones):
+            varname = a.zonetitles[i]
+            varname = varname.replace('t=','').split()[0]
+            filename = a.name + '_' + str(varname) + '.cvs'
+            print filename
+            a.zonetotxt(filename, i, withBoundary)
+
+
+if __name__ == "__main__":
+    if len(argv) == 2:
+        filename = argv[1]
+        name = 'cott_time'
+    elif len(argv) == 3:
+        filename = argv[1]
+        name = argv[2]
+    else:
+        filename = 'cott.tec'
+        name = 'cott_time'
+    tp = loadfiles([[filename, name]])
+    cvsdump(tp,False)

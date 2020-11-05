@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+import sys
+import knuplot
+import matplotlib.pyplot as plt
+
+
+filename = sys.argv[1]
+yvar = sys.argv[2]
+
+tec = knuplot.Tecplot(filename)
+
+plt.plot(tec.ts[-1]["x"],tec.ts[-1][yvar])
+
+plt.xlabel("$x [\mathrm{m}]$",fontsize=16)
+plt.ylabel(yvar,fontsize=16)
+plt.xlim(tec.ts[-1]["x"][0],tec.ts[-1]["x"][-1])
+plt.savefig("knuplot_final.pdf",bbox_inches="tight")
+plt.show()
